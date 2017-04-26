@@ -6,7 +6,7 @@
  * 
  */
 abstract class AbstractModel
-{
+{  
 	// имя сущности
 	static protected $table;
 
@@ -74,7 +74,7 @@ abstract class AbstractModel
 		$db->setClassName( get_called_class() );
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE id=:id';
 
-		$result = $db->queryDB($sql, [':id' => $id][0]);
+		$result = $db->queryDB($sql, [':id' => $id] );
 		if ( !empty($result) ) {
 			return $result[0];
 		}
@@ -90,15 +90,16 @@ abstract class AbstractModel
 	 */
 	public static function findOneByColumn($column, $value)
 	{
-		$db = new DB;
+		$db = new DB();
 		$db->setClassName( get_called_class() );
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
 		// echo $sql;die;
-		$result = $db->queryDB($sql, [':value' => $value][0]);
-		if ( !empty($result) ) {
-			return $result[0];
+		$result = $db->queryDB($sql, [':value' => $value]);
+		if (empty($result)) {
+			throw new ModelException('Ничего не найдено...');
 		}
-		return false;
+
+		return $result[0];
 	}
 
 
@@ -118,13 +119,12 @@ abstract class AbstractModel
 	/**
 	 * @todo реализовать проверку вывода
 	 */
-	protected function insert()
+	public function insert()
 	{
-		$db = new DB();
-		// получим массив ключей
 		$cols = array_keys($this->data);
-		// $colsPrepare = array_map( function ($col_name) {return ':' . $col_name;}, $cols);
+		var_dump($cols);die;
 		$dataExec = [];
+
 		foreach ($this->data as $key => $value) {
 			$dataExec[':' .  $key] = $value;
 		}
@@ -135,7 +135,8 @@ abstract class AbstractModel
 				(' . implode(', ', array_keys($dataExec)). ')
 			';
 
-		$result = $db->execute($sql, $dataExec);
+		$db = new DB();
+		$result = $db->executeDB($sql, $dataExec);
 
 		// Получим id, созданной записи
 			$this->id = $db->lastInsertId();
@@ -164,7 +165,7 @@ abstract class AbstractModel
 				. ' WHERE id = :id';
 
 		$db = new DB();
-		$result = $db->execute($sql, $data);
+		$result = $db->executeDB($sql, $data);
 	}
 
 
@@ -173,10 +174,10 @@ abstract class AbstractModel
 	 */
 	protected function delete()
 	{
-		$db = new DB;
+		$db = new DB();
 
 		$sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
-		$result = $db->execute($sql, [':id' => $this->id]);
+		$result = $db->executeDB($sql, [':id' => $this->id]);
 	}
 
 	/**

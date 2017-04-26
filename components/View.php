@@ -8,41 +8,25 @@
 class View
 {
 	protected $data = [];
-	const PATH = __DIR__ . '/../views/';
 
-	// Назначает имя и значение (передача данных объекту)
+	/**
+	 * Назначает имя и значение (передача данных объекту)
+	 */
 	public function assign($name, $value)
 	{
 		$this->data[$name] = $value;
 	}
 
-	// Подключает шаблон
+	/**
+	 * Подключаем шаблон
+	 */
 	public function display($template)
 	{
-		// Преобразуем: $this->data['items'] ==> $items
+		// Преобразуем: $this->data['items'] в $items
 		foreach ($this->data as $key => $val) {
-			$$key = $val; // $items = $val;
+			$$key = $val; 
 		}
 
-		include PATH . $template;
-	}
-}
-
-
-class View
-{
-	protected $data = [];
-
-	// Подключает шаблон
-	public function display($name, $value, $template)
-	{
-		$this->data[$name] = $value;
-
-		// Преобразуем: $this->data['$name'] ==> $name
-		foreach ($this->data as $key => $val) {
-			$key = $val; // $name = $val;
-		}
-
-		include ROOT . '/views/' . $template;
+		require_once ROOT . '/views/' . $template;
 	}
 }

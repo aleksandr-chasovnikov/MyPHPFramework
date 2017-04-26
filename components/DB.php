@@ -10,7 +10,7 @@ class DB
      */
 	public function __construct()
 	{
-		$this->dbh = new PDO('mysql:db=name;host=localhost', 'root', '');
+		$this->dbh = new PDO('mysql:dbname=myphpframework;host=MyPHPFramework', 'root', '');
 	}
 
     /**

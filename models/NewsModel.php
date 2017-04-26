@@ -2,12 +2,14 @@
 
 /**
  * Class NewsModel
- * @property $id
- * @property $title
- * @property $text
  */
 class NewsModel extends AbstractModel
 {
-	protected static $tables = 'news';
+
+	protected static $table = 'news';
+	
+	public $id;
+	public $title;
+	public $content;
 
 }
