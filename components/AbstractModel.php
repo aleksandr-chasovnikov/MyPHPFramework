@@ -47,7 +47,7 @@ abstract class AbstractModel
 
 	/** 
 	 * @static Выборка множества записей
-     * @return array <p>Массив с записями</p>
+     * @return array[object]
 	 */
 	public static function findAll()
 	{
@@ -66,7 +66,7 @@ abstract class AbstractModel
 	/**
 	 * Выборка одной записи по id
      * @param integer $id <p>id записи</p>
-     * @return object
+     * @return array[object]
 	 */
 	public static function findOneById($id)
 	{
@@ -86,20 +86,20 @@ abstract class AbstractModel
 	 * Выборка одной записи по имени поля
 	 * @param mixed $column
 	 * @param mixed $value
-	 * @return object
+     * @return array[object]
 	 */
 	public static function findOneByColumn($column, $value)
 	{
 		$db = new DB();
 		$db->setClassName( get_called_class() );
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
-		// echo $sql;die;
 		$result = $db->queryDB($sql, [':value' => $value]);
-		if (empty($result)) {
-			throw new ModelException('Ничего не найдено...');
-		}
+		print_r($result);die;
+		// if (empty($result)) {
+		// 	throw new ModelException('Ничего не найдено...');
+		// }
 
-		return $result[0];
+		// return $result[0];
 	}
 
 
@@ -121,25 +121,22 @@ abstract class AbstractModel
 	 */
 	public function insert()
 	{
-		$cols = array_keys($this->data);
-		var_dump($cols);die;
-		$dataExec = [];
-
-		foreach ($this->data as $key => $value) {
-			$dataExec[':' .  $key] = $value;
+		$values = [];
+		foreach ($this->data as $key => $val) {
+			$values[':' .  $key] = $val;
 		}
 
-		$sql = 'INSERT INTO ' . static::$table . '
-				(' . implode(', ', $cols). ') 
-				VALUES
-				(' . implode(', ', array_keys($dataExec)). ')
-			';
+		$values_str = implode(', ', array_keys($values));
+		$keys_str = implode(', ', array_keys($this->data));
+
+		$sql = 'INSERT INTO ' . static::$table . '(' . $keys_str . ') 
+				VALUES (' . $values_str . ')';
 
 		$db = new DB();
-		$result = $db->executeDB($sql, $dataExec);
+		$result = $db->executeDB($sql, $values);
 
 		// Получим id, созданной записи
-			$this->id = $db->lastInsertId();
+			$this->id = $db->lastInsertById();
 	}
 
 

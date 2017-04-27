@@ -1,10 +1,11 @@
- <?php
+<?php
 
 class NewsController
 {
 
 	/**
 	 * Возращает множество записей
+	 * @return object
 	 */
 	public function actionAll()
 	{
@@ -16,6 +17,8 @@ class NewsController
 
 	/**
 	 * Возращает одну запись по id
+	 * @param integer $id
+	 * @return object
 	 */
 	public function actionOne()
 	{
@@ -35,11 +38,14 @@ class NewsController
 
 	/**
 	 * Возращает одну запись имени и значению поля
+	 * @param mixed $column
+	 * @param mixed $value
+	 * @return object
 	 */
 	public function actionColumn()
 	{
-		$column = $_GET['column'];
-		$value = $_GET['value'];
+		$column = array_keys($_GET[0]); // ???
+		$value = $_GET[0];
 		$items = NewsModel::findOneByColumn($column, $value);
 
 		if (empty($items)) {
@@ -55,15 +61,16 @@ class NewsController
 
 	/**
 	 * Создает запись
+	 * @return integer $id
 	 */
 	public function actionCreate()
 	{
 		require_once ROOT . '/views/news/create.php';
-		if (!empty($_POST['title']) || !empty($_POST['content'])) {
+		if (!empty($_POST['title']) && !empty($_POST['content'])) {
 
+			$item = new NewsModel();
 			$item->title=$_POST['title'];
 			$item->content=$_POST['content'];
-			$item = new NewsModel();
 			$item->insert();
 		}
 	}
