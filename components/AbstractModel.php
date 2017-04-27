@@ -92,14 +92,16 @@ abstract class AbstractModel
 	{
 		$db = new DB();
 		$db->setClassName( get_called_class() );
-		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
-		$result = $db->queryDB($sql, [':value' => $value]);
-		print_r($result);die;
-		// if (empty($result)) {
-		// 	throw new ModelException('Ничего не найдено...');
-		// }
 
-		// return $result[0];
+		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
+
+		$result = $db->queryDB($sql, [':value' => $value]);
+		
+		if (empty($result)) {
+			throw new ModelException('Ничего не найдено...');
+		}
+
+		return $result[0];
 	}
 
 
@@ -122,6 +124,7 @@ abstract class AbstractModel
 	public function insert()
 	{
 		$values = [];
+
 		foreach ($this->data as $key => $val) {
 			$values[':' .  $key] = $val;
 		}
@@ -145,24 +148,26 @@ abstract class AbstractModel
 	 */
 	protected function update()
 	{
-		$cols = [];
-		$data = [];
+		$keys = [];
+		$value = [];
 
-		foreach ($this->data as $key => $value) {
-			$data[':' . $key] = $value;
+		foreach ($this->data as $key => $val) {
+			$value[':' . $key] = $val;
+
 			if ('id' == $key) {
 				continue;
 			}
-			$cols[] = $key . '= :' . $key;
+			$keys[] = $key . '= :' . $key;
 		}
 
-		$data[':id'] = $this->id;
+		$value[':id'] = $this->id;
+		
 		$sql = 'UPDATE ' . static::$table 
-				. ' SET ' . implode(', ', $cols) 
+				. ' SET ' . implode(', ', $keys) 
 				. ' WHERE id = :id';
 
 		$db = new DB();
-		$result = $db->executeDB($sql, $data);
+		$result = $db->executeDB($sql, $value);
 	}
 
 

@@ -44,8 +44,10 @@ class NewsController
 	 */
 	public function actionColumn()
 	{
-		$column = array_keys($_GET[0]); // ???
-		$value = $_GET[0];
+		// $column = array_keys($_GET[0]); // ???
+		// $value = $_GET[0];
+		$column = 'title';
+		$value = 'sdfsdf';
 		$items = NewsModel::findOneByColumn($column, $value);
 
 		if (empty($items)) {
@@ -73,5 +75,31 @@ class NewsController
 			$item->content=$_POST['content'];
 			$item->insert();
 		}
+	}
+
+	/**
+	 * Создает запись
+	 * @return integer $id
+	 */
+	public function actionUpdate()
+	{
+		$id = $_GET['id'];
+		$items = NewsModel::findOneById($id);
+
+		if (empty($items)) {
+			throw new ModelException('errorOne');
+
+		} else {
+
+		$view = new View();
+		$view->assign('items', $items);
+		$view->display('news/update.php');
+		}
+
+		
+
+			$item = new NewsModel();
+			$item->update();
+		
 	}
 }
