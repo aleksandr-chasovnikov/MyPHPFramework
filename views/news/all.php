@@ -7,7 +7,7 @@
 <body>
 
 <?php foreach ($items as $item): ?>
-	<h2><a href="News/One/<?= $item->id;?>"><?php echo $item->title; ?></a></h2>
+	<h2><a href="News/One?id=<?= $item->id;?>"><?php echo $item->title; ?></a></h2>
 	<div><?php echo $item->content; ?></div>
 <?php endforeach; ?>
 

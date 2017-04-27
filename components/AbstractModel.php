@@ -97,10 +97,6 @@ abstract class AbstractModel
 
 		$result = $db->queryDB($sql, [':value' => $value]);
 
-		if (empty($result)) {
-			throw new ModelException('Ничего не найдено...'); //Перенести в контроллер
-		}
-
 		return $result[0];
 	}
 

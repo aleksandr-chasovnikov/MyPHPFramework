@@ -1,6 +1,37 @@
-#Включить преобразование адресов
-RewriteEngine On
+AddDefaultCharset utf-8
 
+RewriteEngine on
+RewriteBase /
+
+#Если запрашиваемое не является существующим ФАЙЛОМ
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#Если запрашиваемое не является существующей ДИРЕКТОРИЕЙ
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ index.php
+
+
+# Попробуйте эту настройку .htaccess, если у Вас возникли проблемы с отображением
+# стилей css
+#AddDefaultCharset cp-1251
+#ErrorDocument 404 / 
+#RewriteEngine On
+#RewriteCond %{REQUEST_FILENAME} -s [OR]
+#RewriteCond %{REQUEST_FILENAME} -l [OR]
+#RewriteCond %{REQUEST_FILENAME} -d
+#RewriteRule ^.*$ - [L]
+#RewriteRule ^.*$ index.php [L]
+
+
+
+
+
+#RewriteRule ^([a-zA-Z]+)/?$ index.php?ctrl=$1&act=index
+#RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)?$ index.php?ctrl=$1&act=$2
+#RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)/([0-9]+)$ index.php?ctrl=$1&act=$2&id=$3
+
+# $1 - первые скобки, $2 - вторые скобки 
 # Если включен МодРеал(модуль преобразования адресов) в Апаче:
 # Взять адрес с самого начала (любые англ буквы в любом количестве(не 0) любого регистра),
 # заканчиваются возможно на "/" и перенаправить на index.php в параметр контролера
@@ -9,7 +40,5 @@ RewriteEngine On
 # "/?" - один "/" или ничего
 #
 
-# $1 - первые скобки, $2 - вторые скобки 
-RewriteRule ^([a-zA-Z]+)/?$ index.php?ctrl=$1&act=index
-RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)?$ index.php?ctrl=$1&act=$2
-RewriteRule ^([a-zA-Z]+)/([a-zA-Z]+)/([0-9]+)$ index.php?ctrl=$1&act=$2&id=$3
+#Любые символы перенаправить на index.php
+#RewriteRule ^(.*)$ index.php

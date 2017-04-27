@@ -10,7 +10,7 @@
 	<input type="text" name="title" requred>
 	<br>
 	<br>
-	<input type="text" name="content" requred>
+	<textarea name="content" cols="100" rows="10" requred></textarea> 
 	<br>
 	<br>
 	<input type="submit" name="submit">

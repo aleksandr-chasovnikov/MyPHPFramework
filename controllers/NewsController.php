@@ -28,12 +28,12 @@ class NewsController
 		if (empty($items)) {
 			throw new ModelException('errorOne');
 
-		} else {
+		}
 
 		$view = new View();
 		$view->assign('items', $items);
 		$view->display('news/one.php');
-		}
+		
 	}
 
 	/**
@@ -74,7 +74,7 @@ class NewsController
 			$item = new NewsModel();
 			$item->title=$_POST['title'];
 			$item->content=$_POST['content'];
-			$item->insert();
+			$item->save();
 		}
 	}
 
