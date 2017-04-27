@@ -68,6 +68,7 @@ class NewsController
 	public function actionCreate()
 	{
 		require_once ROOT . '/views/news/create.php';
+
 		if (!empty($_POST['title']) && !empty($_POST['content'])) {
 
 			$item = new NewsModel();
@@ -83,23 +84,24 @@ class NewsController
 	 */
 	public function actionUpdate()
 	{
-		$id = $_GET['id'];
-		$items = NewsModel::findOneById($id);
+		$items = NewsModel::findOneByColumn('title', 'Новый заголовок');
 
-		if (empty($items)) {
-			throw new ModelException('errorOne');
+		// if (empty($items)) {
+		// 	throw new ModelException('errorOne');
+		// } else {
+		// 	$view = new View();
+		// 	$view->assign('items', $items);
+		// 	$view->display('news/update.php');
+		// }
 
-		} else {
+		// if (isset($_POST['submit']) && !empty($_POST['title']) && !empty($_POST['content'])) {
 
-		$view = new View();
-		$view->assign('items', $items);
-		$view->display('news/update.php');
-		}
-
-		
-
-			$item = new NewsModel();
-			$item->update();
-		
+			// $item = new NewsModel();
+			// $item->title=$_POST['title'];
+			// $item->content=$_POST['content'];
+			$items->title='Новый заголовок123';
+			$items->save();
+		// }
+			
 	}
 }

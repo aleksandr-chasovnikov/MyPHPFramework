@@ -96,9 +96,9 @@ abstract class AbstractModel
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
 
 		$result = $db->queryDB($sql, [':value' => $value]);
-		
+
 		if (empty($result)) {
-			throw new ModelException('Ничего не найдено...');
+			throw new ModelException('Ничего не найдено...'); //Перенести в контроллер
 		}
 
 		return $result[0];
@@ -121,7 +121,7 @@ abstract class AbstractModel
 	/**
 	 * @todo реализовать проверку вывода
 	 */
-	public function insert()
+	protected function insert()
 	{
 		$values = [];
 
@@ -137,9 +137,7 @@ abstract class AbstractModel
 
 		$db = new DB();
 		$result = $db->executeDB($sql, $values);
-
-		// Получим id, созданной записи
-			$this->id = $db->lastInsertById();
+		$this->id = $db->lastInsertById();
 	}
 
 
@@ -151,17 +149,16 @@ abstract class AbstractModel
 		$keys = [];
 		$value = [];
 
-		foreach ($this->data as $key => $val) {
-			$value[':' . $key] = $val;
+		foreach ($this->data as $k => $v) {
+			$value[':' . $k] = $v;
 
-			if ('id' == $key) {
+			if ('id' == $k) {
 				continue;
 			}
-			$keys[] = $key . '= :' . $key;
+			$keys[] = $k . '=:' . $k;
 		}
 
-		$value[':id'] = $this->id;
-		
+		// $value[':id'] = $this->id;
 		$sql = 'UPDATE ' . static::$table 
 				. ' SET ' . implode(', ', $keys) 
 				. ' WHERE id = :id';
