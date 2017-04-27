@@ -1,16 +1,14 @@
 <?php
 
-/**
- * 
- * @abstract class AbstractModel
- * 
+namespace Application\Components;
+
+/** 
+ * @abstract class AbstractModel 
  */
 abstract class AbstractModel
-{  
-	// имя сущности
+{
 	static protected $table;
 
-	// Массив полей и их значений
 	protected $data = [];
 
 
@@ -34,8 +32,6 @@ abstract class AbstractModel
 
 
     /**
-     * Задает возможность проверки данных,
-     * полученных через __set()
      * @param $key
      * @return boolean
      */
@@ -51,7 +47,7 @@ abstract class AbstractModel
 	 */
 	public static function findAll()
 	{
-		$db = new DB();
+		$db = new \DB();
 		$db->setClassName( get_called_class() );
 		$sql = 'SELECT * FROM ' . static::$table;
 
@@ -70,7 +66,7 @@ abstract class AbstractModel
 	 */
 	public static function findOneById($id)
 	{
-		$db = new DB();
+		$db = new \DB();
 		$db->setClassName( get_called_class() );
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE id=:id';
 
@@ -90,7 +86,7 @@ abstract class AbstractModel
 	 */
 	public static function findOneByColumn($column, $value)
 	{
-		$db = new DB();
+		$db = new \DB();
 		$db->setClassName( get_called_class() );
 
 		$sql = 'SELECT * FROM ' . static::$table . ' WHERE ' . $column . ' =:value';
@@ -131,14 +127,15 @@ abstract class AbstractModel
 		$sql = 'INSERT INTO ' . static::$table . '(' . $keys_str . ') 
 				VALUES (' . $values_str . ')';
 
-		$db = new DB();
+		$db = new \DB();
 		$result = $db->executeDB($sql, $values);
 		$this->id = $db->lastInsertById();
 	}
 
 
 	/**
-	 * 
+	 * Метод редактирования записей
+	 * @param array
 	 */
 	protected function update()
 	{
@@ -159,27 +156,19 @@ abstract class AbstractModel
 				. ' SET ' . implode(', ', $keys) 
 				. ' WHERE id = :id';
 
-		$db = new DB();
+		$db = new \DB();
 		$result = $db->executeDB($sql, $value);
 	}
 
 
 	/**
-	 * 
+	 * Метод удаления записей
 	 */
 	protected function delete()
 	{
-		$db = new DB();
+		$db = new \DB();
 
 		$sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
 		$result = $db->executeDB($sql, [':id' => $this->id]);
-	}
-
-	/**
-	 * @todo Задание свойств объектам
-	 */
-	public function fill($data = [])
-	{
-
 	}
 }

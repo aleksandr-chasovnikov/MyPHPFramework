@@ -11,7 +11,7 @@ function __autoload($class_name)
 		require ROOT . '/components/' . $class_name . '.php';
 	} else {
 
-		$classParts = explode('\\', $class);
+		$classParts = explode('\\', $class_name);
 		$classParts[0] = ROOT;
 		$path = implode(DIRECTORY_SEPARATOR, $classParts) . '.php';
 		if (file_exists($path)) {

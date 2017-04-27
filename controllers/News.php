@@ -1,6 +1,14 @@
 <?php
 
-class NewsController
+namespace Application\Controllers;
+
+
+use Application\Models\News as NewsModel;
+
+/**
+ * 
+ */
+class News
 {
 
 	/**
@@ -10,7 +18,7 @@ class NewsController
 	public function actionAll()
 	{
 		$items = NewsModel::findAll();
-		$view = new View();
+		$view = new \View();
 		$view->assign('items', $items);
 		$view->display('news/all.php');
 	}
@@ -30,7 +38,7 @@ class NewsController
 
 		}
 
-		$view = new View();
+		$view = new \View();
 		$view->assign('items', $items);
 		$view->display('news/one.php');
 		
@@ -55,7 +63,7 @@ class NewsController
 
 		} else {
 
-		$view = new View();
+		$view = new \View();
 		$view->assign('items', $items);
 		$view->display('news/one.php');
 		}
@@ -79,6 +87,7 @@ class NewsController
 	}
 
 	/**
+	 * @todo недоделано!!!
 	 * Создает запись
 	 * @return integer $id
 	 */
@@ -89,7 +98,7 @@ class NewsController
 		// if (empty($items)) {
 		// 	throw new ModelException('errorOne');
 		// } else {
-		// 	$view = new View();
+		// 	$view = new \View();
 		// 	$view->assign('items', $items);
 		// 	$view->display('news/update.php');
 		// }

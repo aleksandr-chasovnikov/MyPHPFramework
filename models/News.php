@@ -1,9 +1,13 @@
 <?php
 
+namespace Application\Models;
+
+use Application\Components\AbstractModel;
+
 /**
  * Class NewsModel
  */
-class NewsModel extends AbstractModel
+class News extends AbstractModel
 {
 
 	protected static $table = 'news';
