@@ -9,12 +9,30 @@ class View
 {
 	protected $data = [];
 
-	/**
-	 * Назначает имя и значение (передача данных объекту)
-	 */
-	public function assign($name, $value)
+    /**
+     * @param $key
+     * @param $value
+     */
+	public function __set($key, $value)
 	{
-		$this->data[$name] = $value;
+		$this->data[$key] = $value;
+	}
+
+    /**
+     * @param $key
+     */
+	public function __get($key)
+	{
+		$this->data[$key];
+	}
+
+    /**
+     * @param $key
+     * @return boolean
+     */
+	public function __isset($key)
+	{
+		return isset($this->data[$key]);
 	}
 
 	/**

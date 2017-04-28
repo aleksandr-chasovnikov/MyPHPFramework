@@ -11,7 +11,6 @@ abstract class AbstractModel
 
 	protected $data = [];
 
-
     /**
      * @param $key
      * @param $value
@@ -21,7 +20,6 @@ abstract class AbstractModel
 		$this->data[$key] = $value;
 	}
 
-
     /**
      * @param $key
      */
@@ -29,7 +27,6 @@ abstract class AbstractModel
 	{
 		$this->data[$key];
 	}
-
 
     /**
      * @param $key
@@ -40,12 +37,11 @@ abstract class AbstractModel
 		return isset($this->data[$key]);
 	}
 
-
 	/** 
 	 * @static Выборка множества записей
      * @return array[object]
 	 */
-	public static function findAll()
+	public static function getAll()
 	{
 		$db = new \DB();
 		$db->setClassName( get_called_class() );
@@ -58,13 +54,12 @@ abstract class AbstractModel
 		return false;
 	}
 
-
 	/**
 	 * Выборка одной записи по id
      * @param integer $id <p>id записи</p>
      * @return array[object]
 	 */
-	public static function findOneById($id)
+	public static function getOneById($id)
 	{
 		$db = new \DB();
 		$db->setClassName( get_called_class() );
@@ -77,14 +72,13 @@ abstract class AbstractModel
 		return false;
 	}
 
-
 	/**
 	 * Выборка одной записи по имени поля
 	 * @param mixed $column
 	 * @param mixed $value
      * @return array[object]
 	 */
-	public static function findOneByColumn($column, $value)
+	public static function getOneByColumn($column, $value)
 	{
 		$db = new \DB();
 		$db->setClassName( get_called_class() );
@@ -96,19 +90,19 @@ abstract class AbstractModel
 		return $result[0];
 	}
 
-
 	/**
 	 * Используется вместо методов insert(), update()
 	 */
 	public function save()
 	{
-		if (!isset($this->id)) {
+		if (empty($this->data['id'])) {
+			// vd('insert');
 			$this->insert();
 		} else {
+			// vd('update');
 			$this->update();
 		}
 	}
-
 
 	/**
 	 * @todo реализовать проверку вывода
@@ -132,7 +126,6 @@ abstract class AbstractModel
 		$this->id = $db->lastInsertById();
 	}
 
-
 	/**
 	 * Метод редактирования записей
 	 * @param array
@@ -144,7 +137,6 @@ abstract class AbstractModel
 
 		foreach ($this->data as $k => $v) {
 			$value[':' . $k] = $v;
-
 			if ('id' == $k) {
 				continue;
 			}
@@ -155,20 +147,20 @@ abstract class AbstractModel
 		$sql = 'UPDATE ' . static::$table 
 				. ' SET ' . implode(', ', $keys) 
 				. ' WHERE id = :id';
+				// vd($value);
 
 		$db = new \DB();
 		$result = $db->executeDB($sql, $value);
 	}
 
-
 	/**
 	 * Метод удаления записей
 	 */
-	protected function delete()
+	public function delete()
 	{
 		$db = new \DB();
 
 		$sql = 'DELETE FROM ' . static::$table . ' WHERE id=:id';
-		$result = $db->executeDB($sql, [':id' => $this->id]);
+		$result = $db->executeDB($sql, [':id' => $this->data['id']]);
 	}
 }
